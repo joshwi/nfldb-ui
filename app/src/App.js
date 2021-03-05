@@ -7,6 +7,8 @@ import PropTypes from "prop-types"
 
 import Home from "./pages/PAGE_HOME"
 import Table from "./pages/PAGE_TABLE"
+import Chart from "./pages/PAGE_CHART"
+import Explorer from "./pages/PAGE_EXPLORER"
 import Map from "./pages/PAGE_MAP"
 import NotFound from "./pages/PAGE_NOT_FOUND"
 
@@ -34,7 +36,9 @@ function App(props) {
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path={"/table/:schema"} exact render={() => <Table {...props} />} />
-          <Route path={"/map/:schema"} exact component={Map} />
+          <Route path={"/chart/:schema"} exact render={() => <Chart {...props} />} />
+          <Route path={"/explorer/:schema"} exact render={() => <Explorer {...props} />} />
+          <Route path={"/map/:schema"} exact render={() => <Map {...props} />} />
           <Route component={NotFound} />
         </Switch>
       </main>

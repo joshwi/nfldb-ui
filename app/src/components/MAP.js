@@ -7,44 +7,37 @@ import mapboxgl from 'mapbox-gl';
 
 function MAP(props) {
 
-    // useEffect(() => { console.log(props.data) }, [props.data])
-
     var peerSource, initialFeatures
 
     const [viewPort, SetViewPort] = useState({
-        latitude: 38,
-        longitude: -100,
-        zoom: 4
+        latitude: 40,
+        longitude: -110,
+        zoom: 3
     })
 
     useEffect(() => {
 
-            // mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
-            mapboxgl.accessToken = "pk.eyJ1IjoianNod2lsbGlhbXMiLCJhIjoiY2tmNjdxam96MDJ3bDJ5cXA4MGJ4OTM5ZCJ9.0-i8n1QaPoRrdYFBt_OdDQ"
-            var map = new mapboxgl.Map({
-                container: 'mapbox',
-                style: 'mapbox://styles/mapbox/dark-v10',
-                center: [viewPort.longitude, viewPort.latitude],
-                zoom: viewPort.zoom
-            });
+        // mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
+        mapboxgl.accessToken = "pk.eyJ1IjoianNod2lsbGlhbXMiLCJhIjoiY2tmNjdxam96MDJ3bDJ5cXA4MGJ4OTM5ZCJ9.0-i8n1QaPoRrdYFBt_OdDQ"
+        var map = new mapboxgl.Map({
+            container: 'mapbox',
+            style: 'mapbox://styles/mapbox/dark-v10',
+            center: [viewPort.longitude, viewPort.latitude],
+            zoom: viewPort.zoom
+        });
+        
     }, [])
 
-    // searchbox onkeyup brings you here - passed value is the search string
-    function searchPeers(search) {
-        // console.log(search)
-        // if nothing (search cleared), reset to initial features
-        if (search == '') {
-            var newFeatures = initialFeatures
-        } else {
-            // var newFeatures = initialFeatures.filter((peer) => peer.properties.description.toLowerCase().includes(search))   // searched based on peer description only
-            var newFeatures = initialFeatures.filter((peer) => Object.keys(peer.properties).some(k => peer.properties[k].toLowerCase().includes(search)))   // search across all peer properties
-        }
+    // function searchPeers(search) {
+    //     if (search == '') {
+    //         var newFeatures = initialFeatures
+    //     } else {
+    //         var newFeatures = initialFeatures.filter((peer) => Object.keys(peer.properties).some(k => peer.properties[k].toLowerCase().includes(search)))
+    //     }
 
-        peerSource._data.features = newFeatures.flat()  // remove extra depth of array [[],[],[]] => [,,]
-        peerSource.setData(peerSource._data)   // update map source (data the visual layer is referencing)
-    }
-
-    // useEffect(() => { console.log(props.data) }, [props.data])
+    //     peerSource._data.features = newFeatures.flat()
+    //     peerSource.setData(peerSource._data)
+    // }
 
     return (
         <>
@@ -85,16 +78,10 @@ function MAP(props) {
                 </style>
             </header>
             <body>
-                {/* {props.data.features !== undefined && props.data.features.length === 0 && (
-                    <div className='col-md-12 flex-center panel'>
-                    </div>
-                )}
-                {props.data.features !== undefined && props.data.features.length > 0 && ( */}
-                    <>
-                        <input type="search" id="search" class="form-control col-2" placeholder="Search NFLdb" onChange={(e) => searchPeers(e.target.value)}></input>
-                        <div style={{ height: "100vh", width: "100vw" }} id="mapbox"></div>
-                    </>
-                {/* )} */}
+                <>
+                    <input type="search" id="search" class="form-control col-2" placeholder="Search NFLdb" onChange={(e) => console.log(e.target.value)}></input>
+                    <div style={{ height: "100vh", width: "100vw" }} id="mapbox"></div>
+                </>
             </body>
         </>
     )

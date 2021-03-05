@@ -14,56 +14,46 @@ morgan.token("trueIp", (req) => requestIp.getClientIp(req));
 app.use(morgan(":trueIp :method :url :response-time ms"));
 
 //Import Environment Variables
-require("dotenv").config({path: path.resolve(__dirname, '../.env')});
+require("dotenv").config({ path: path.resolve(__dirname, '../.env') });
 
 let PROXY_URL = process.env.PROXY_URL
 let PROXY_TOKEN = process.env.PROXY_TOKEN
 
-async function api_request(url, method, body) {
+async function api_request(url, req, res) {
+
+    let status = 200
 
     let headers = {
         "Accept": "application/json",
         "Content-Type": "application/json",
         "Authorization": "Bearer " + PROXY_TOKEN,
     }
-    let output = { message: "Request Failed" }
-    if (method === "POST" && body !== undefined) {
-        output = axios({
-            method: method,
-            url: url,
-            headers: headers,
-            data: body
-        }).then(response => {
-            return response.data
-        }).catch(error => {
-            return { message: "Request Failed", error: error }
-        })
-    }
-    else {
-        output = axios({
-            method: method,
-            url: url,
-            headers: headers,
-        }).then(response => {
-            return response.data
-        }).catch(error => {
-            return { message: "Request Failed", error: error }
-        })
-    }
-    return output
+
+    let response = await axios({
+        method: req.method,
+        url: url,
+        headers: headers,
+        data: req.body
+    }).then(response => {
+        return response.data
+    }).catch(error => {
+        status = error.response.status
+        return { message: "API Request Failed", url: url, method: req.method, status: error.response.status, error: error.message }
+    })
+
+    res.status(status).json(response)
+
+    return res
 }
 
 app.all("*", async function (req, res, next) {
-    let output = { message: "Local proxy error", error: "Not a valid API request!" }
-    if (req.url !== undefined && req.method !== undefined) {
-        if (req.url.indexOf("/api/static/images") === -1) {
-            let url = `${PROXY_URL}${req.url}`
-            output = await api_request(url, req.method, req.body)
-            return res.send(output)
-        }
-        else {
-            next()
-        }
+    if (req.url.indexOf("/api/static/images") === -1) {
+        let url = `${PROXY_URL}${req.url}`
+        let output = await api_request(url, req, res)
+        return output
+    }
+    else {
+        next()
     }
 });
 

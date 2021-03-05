@@ -1,7 +1,8 @@
 #sidebar {
-    position:absolute;
+    position: fixed;
     top:0px;
     left:0px;
+    bottom: 0px;
     width:50px;
     height:100%;
     background:#151719;
@@ -48,13 +49,8 @@
   overflow-x:auto;
 }
 
-#th {
-  padding: 0.5rem;
-}
-
 #td {
   margin: 0;
-  padding: 0.5rem;
   font-size: 0.25rem;
   position: relative;
   text-align: center;
@@ -66,7 +62,7 @@
 .resizer {
   display: inline-block;
   background: white;
-  width: 2px;
+  width: 1px;
   height: 100%;
   position: absolute;
   right: 0;

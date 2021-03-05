@@ -1,11 +1,11 @@
 import React from "react"
-// import Map from "../components/MAP"
+import Map from "../components/MAP"
 
 function Home() {
 
     return (
         <>
-        {/* <Map /> */}
+        <Map />
         </>
     )
 }

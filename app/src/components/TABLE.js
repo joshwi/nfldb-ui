@@ -22,11 +22,12 @@ function DefaultColumnFilter({ column: { filterValue, preFilteredRows, setFilter
 
 	return (
 		<input
+			style={{ width: "80%" }}
 			value={filterValue || ''}
 			onChange={(e) => {
 				setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
 			}}
-			placeholder={`Search ${count} records...`}
+			placeholder={`${count} records`}
 		/>
 	);
 }
@@ -40,7 +41,7 @@ function GlobalFilter({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) 
 			onChange={(e) => {
 				setGlobalFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
 			}}
-			placeholder={`Search ${count} accounts`}
+			placeholder={`Filter ${count} records`}
 			className="form-control"
 			style={{
 				height: '2rem',
@@ -197,15 +198,11 @@ function App(props) {
 											<div className="tr" {...column.getHeaderProps()}>
 												<span {...column.getSortByToggleProps()}>
 													{column.render('Header')}
-													<div
-														{...column.getResizerProps()}
-														className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
-													/>
-													{/* Add a sort direction indicator */}
-													{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+													<div {...column.getResizerProps()} className={`resizer ${column.isResizing ? 'isResizing' : ''}`}/>
+													{column.isSorted ? (column.isSortedDesc ? <i className="bi bi-chevron-down" style={{ color: "white", margin: "5px" }}/> : <i className="bi bi-chevron-up" style={{ color: "white", margin: "5px" }}/>) : ''}
 												</span>
 												{/* Render the columns filter UI */}
-												{/* <div>{column.canFilter ? column.render('Filter') : null}</div> */}
+												<div style={{marginTop: "5px"}}>{column.canFilter ? column.render('Filter') : null}</div>
 											</div>
 										))}
 									</th>
@@ -232,8 +229,8 @@ function App(props) {
 				</Col>
 			</Row>
 			<Row style={{ color: 'white', marginTop: '10px', height: '50px' }}>
-				<Col xs={{ size: 1 }}/>
-				<Col/>
+				<Col xs={{ size: 1 }} />
+				<Col />
 				<Col xs={{ size: 2 }} style={{ display: 'flex', justifyContent: 'center' }}>
 					<div style={{ display: 'table', height: '50px' }}>
 						<div style={{ color: 'white', display: 'table-cell', verticalAlign: 'middle', whiteSpace: "nowrap" }}>
@@ -244,7 +241,7 @@ function App(props) {
 									onClick={() => gotoPage(0)}
 									disabled={!canPreviousPage}
 								>
-									{'<<'}
+									<i className="bi bi-chevron-left" style={{color: "white"}}/>
 								</button>
 								<button
 									className="btn btn-default"
@@ -252,7 +249,7 @@ function App(props) {
 									onClick={() => previousPage()}
 									disabled={!canPreviousPage}
 								>
-									{'<'}
+									<i className="bi bi-caret-left-fill" style={{color: "white"}}/>
 								</button>
 								<button
 									className="btn btn-default"
@@ -260,7 +257,7 @@ function App(props) {
 									onClick={() => nextPage()}
 									disabled={!canNextPage}
 								>
-									{'>'}
+									<i className="bi bi-caret-right-fill" style={{color: "white"}}/>
 								</button>
 								<button
 									className="btn btn-default"
@@ -268,13 +265,13 @@ function App(props) {
 									onClick={() => gotoPage(pageCount - 1)}
 									disabled={!canNextPage}
 								>
-									{'>>'}
+									<i className="bi bi-chevron-right" style={{color: "white"}}/>
 								</button>
 							</div>
 						</div>
 					</div>
 				</Col>
-				<Col xs={{ size: 2 }}style={{ display: 'flex', justifyContent: 'center' }}>
+				<Col xs={{ size: 3 }} style={{ display: 'flex', justifyContent: 'center' }}>
 					<div style={{ display: 'table', height: '50px' }}>
 						<div style={{ color: 'white', display: 'table-cell', verticalAlign: 'middle' }}>
 							<span style={{ display: 'inline-flex' }}>
@@ -303,7 +300,7 @@ function App(props) {
 						</div>
 					</div>
 				</Col>
-				<Col xs={{ size: 2 }} style={{ display: 'flex', justifyContent: 'center' }}>
+				<Col xs={{ size: 3 }} style={{ display: 'flex', justifyContent: 'center' }}>
 					<div style={{ display: 'table', height: '50px' }}>
 						<div style={{ color: 'white', display: 'table-cell', verticalAlign: 'middle' }}>
 							<select
@@ -334,7 +331,7 @@ function App(props) {
 						</div>
 					</div>
 				</Col>
-				<Col/>
+				<Col />
 				<Col xs={{ size: 1 }} />
 			</Row>
 		</Container>

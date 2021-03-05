@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { bindActionCreators } from "redux"
 import { connect } from "react-redux"
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
@@ -17,43 +17,48 @@ import * as actions from "./store/actions"
 
 function App(props) {
 
+  console.log(props)
+
   useEffect(() => {
     props.actions.loadKeys().catch(err => {
       alert(`Loading keys failed: ${err}`)
     })
+    props.actions.loadParams({ view: "table", site: "pfr", category: "team", schema: "season" })
   }, [])
 
   return (
-        <Router>
-          <Sidebar />
-          <Header />
-          <main id="main">
-            <Switch>
-              <Route path={"/"} exact component={Home} />
-              <Route path={"/table/:site/:category/:schema"} exact render={() => <Table keys={props.keys} />} />
-              <Route path={"/map"} exact component={Map} />
-              <Route component={NotFound} />
-            </Switch>
-          </main>
-        </Router>
+    <Router>
+      <Sidebar {...props} />
+      <Header {...props} />
+      <main id="main">
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path={"/table/:schema"} exact render={() => <Table {...props} />} />
+          <Route path={"/map/:schema"} exact component={Map} />
+          <Route component={NotFound} />
+        </Switch>
+      </main>
+    </Router>
   );
 }
 
 App.propTypes = {
   keys: PropTypes.object.isRequired,
+  site: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired
 }
 
 function mapStateToProps(state) {
   return {
-    keys: state.keys
+    keys: state.keys,
+    site: state.site
   }
 }
 
-function mapDispathToProps(dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(actions, dispatch)
   }
 }
 
-export default connect(mapStateToProps, mapDispathToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)

@@ -3,9 +3,15 @@ import { Container, Row, Col } from "reactstrap";
 
 function NotFound() {
     return (
-        <Container style={{  paddingLeft: "150px", textAlign: "center", color: "white", marginTop: "45vh" }}>
-            <Row style={{ marginTop: "50px", }}>
-                <Col><h5>404 Not Found</h5></Col>
+        <Container>
+            <Row>
+                <Col>
+                    <div style={{ color: 'white', display: 'table', textAlign: "center", height: '800px', width: "100%" }}>
+                        <div style={{ display: 'table-cell', verticalAlign: 'middle', whiteSpace: "nowrap" }}>
+                            <h5>404 Not Found</h5>
+                        </div>
+                    </div>
+                </Col>
             </Row>
         </Container>
     )
